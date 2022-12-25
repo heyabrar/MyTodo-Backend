@@ -7,14 +7,14 @@ require("dotenv").config( );
 const {UserModel} = require("../Models/User.model")
 
 UserRouter.post("/signup", async (req,res) =>{
-    const {email,password} = req.body
+    const {userName,email,password} = req.body
     const User_Already_Exist = await UserModel.findOne({email});
     if(User_Already_Exist?.email)  res.send({"message" : "User with Email Already Exist, Try Different Email"});
     else
     {
         try {
             bcrypt.hash(password,4, async function(err,hash){
-                const SignUpData = new UserModel({email,password:hash});
+                const SignUpData = new UserModel({email,password:hash,userName});
                 await SignUpData.save( );
                 res.send({"message" : "SignUp Successful, Please Log In"})
             })
